@@ -45,9 +45,17 @@ public class Master {
         System.out.println(word.description);
         int move = 0;
         while(true){
-            System.out.printf("Игрок под номером %d - %s, ваш ход ↓ \n", move + 1, players[move].name.substring(0, 1).toUpperCase() + players[move].name.substring(1));
+            String player_name = players[move].name.substring(0, 1).toUpperCase() + players[move].name.substring(1);
+            System.out.printf("Игрок под номером %d - %s, ваш ход ↓ \n", move + 1, player_name);
             String user_input = scanner.nextLine();
-
+            if(user_input.length() > 1){
+                if(user_input.equalsIgnoreCase(word.title)){
+                    System.out.println("У нас победитель!!!\nИгрок "  + player_name + " угадал слово!!!");
+                    return;
+                }
+                System.out.printf("Нащ игрок под номером %d - %s покидает нас :(\n\tПожелаем ему удачи !\n", move + 1, player_name);
+                players[move].is_active = false;
+            }
             move ++;
             if(move == players.length)break;
             move %= players.length;
