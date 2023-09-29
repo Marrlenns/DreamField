@@ -22,8 +22,15 @@ public class Master {
         return names;
     }
 
+    public static Word words(){
+        Word testWord = new Word();
+        testWord.title = "Субботник";
+        testWord.description = "Добровольная коллективная бесплатная работа для выполнения какого-н. общественно полезного трудового задания";
+        return testWord;
+    }
+
     public static void main(String[] args) {
         Player[] names = addPlayers();
-
+        Word word = words();
     }
 }
