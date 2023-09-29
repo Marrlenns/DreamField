@@ -32,9 +32,9 @@ public class Master {
     }
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         Player[] players = addPlayers();
         Word word = words();
-        int move = 0;
         if(players.length == 0){
             System.out.println("Игроков к сожалению нет :(\n\tПридется остановить игру :(");
             return;
@@ -43,6 +43,15 @@ public class Master {
         for(int i = 0; i < players.length; i++) System.out.println("\t" + (i + 1) + ". " + players[i].name);
         System.out.println("                    Давайте начнем нашу игру!\n                    ↓↓↓     ПОДСКАЗКА     ↓↓↓");
         System.out.println(word.description);
-//        while()
+        int move = 0;
+        while(true){
+            System.out.printf("Игрок под номером %d - %s, ваш ход ↓ \n", move + 1, players[move].name.substring(0, 1).toUpperCase() + players[move].name.substring(1));
+            String user_input = scanner.nextLine();
+
+            move ++;
+            if(move == players.length)break;
+            move %= players.length;
+
+        }
     }
 }
