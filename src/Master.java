@@ -27,12 +27,22 @@ public class Master {
     public static Word words(){
         Word testWord = new Word();
         testWord.title = "Субботник";
-        testWord.description = "Добровольная коллективная бесплатная работа для выполнения какого-н. общественно полезного трудового задания";
+        testWord.description = "Добровольная коллективная бесплатная работа для выполнения какого-нибудь общественно \nполезного трудового задания";
         return testWord;
     }
 
     public static void main(String[] args) {
-        Player[] names = addPlayers();
+        Player[] players = addPlayers();
         Word word = words();
+        int move = 0;
+        if(players.length == 0){
+            System.out.println("Игроков к сожалению нет :(\n\tПридется остановить игру :(");
+            return;
+        }
+        System.out.println("Игроки будут ходить по следующей очередности ↓");
+        for(int i = 0; i < players.length; i++) System.out.println("\t" + (i + 1) + ". " + players[i].name);
+        System.out.println("                    Давайте начнем нашу игру!\n                    ↓↓↓     ПОДСКАЗКА     ↓↓↓");
+        System.out.println(word.description);
+//        while()
     }
 }
