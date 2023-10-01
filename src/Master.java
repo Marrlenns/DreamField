@@ -31,6 +31,15 @@ public class Master {
         return testWord;
     }
 
+    public static void win(String player_name){
+        System.out.println("↓ ↓ ↓ У нас победитель ↓ ↓ ↓");
+        System.out.println("    ≿━━━━  ༻✦༺  ━━━━≾");
+        for(int i = 0; i < 7 - player_name.length() / 2; i++) System.out.print(" ");
+        System.out.println("       " + player_name);
+        System.out.println("    ≿━━━━  ༻✦༺  ━━━━≾");
+        System.out.println("↑ ↑ ↑ У нас победитель ↑ ↑ ↑");
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Player[] players = addPlayers();
@@ -52,7 +61,7 @@ public class Master {
             String user_input = scanner.nextLine();
             if(user_input.length() > 1){
                 if(user_input.equalsIgnoreCase(word.title)){
-                    System.out.println("У нас победитель!!!\nИгрок "  + player_name + " угадал слово!!!");
+                    win(player_name);
                     return;
                 }
                 System.out.printf("Наш игрок под номером %d - %s покидает нас :(\n\tПожелаем ему удачи !\n", move + 1, player_name);
@@ -71,7 +80,7 @@ public class Master {
                     user_input = scanner.nextLine();
                     if(user_input.length() > 1) {
                         if (user_input.equalsIgnoreCase(word.title)) {
-                            System.out.println("У нас победитель!!!\nИгрок " + player_name + " угадал слово!!!");
+                            win(player_name);
                             return;
                         }
                         System.out.printf("Наш игрок под номером %d - %s покидает нас :(\n\tПожелаем ему удачи !\n", move + 1, player_name);
@@ -90,7 +99,9 @@ public class Master {
                 sum ++;
             }
             if(sum > players.length){
-                System.out.println("Все игроки выбыли!!");
+                System.out.println("•»»————————————————————««•");
+                System.out.println("|   Все игроки выбыли!   |");
+                System.out.println("•»»————————————————————««•");
                 return;
             }
 //            if(move + 1 == players.length)break;
