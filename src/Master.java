@@ -69,14 +69,29 @@ public class Master {
                     }
                     System.out.println("Вы угадали букву, данное слово выглядит так: " + field + "\nВам предоставляется еще один ход ↓");
                     user_input = scanner.nextLine();
+                    if(user_input.length() > 1) {
+                        if (user_input.equalsIgnoreCase(word.title)) {
+                            System.out.println("У нас победитель!!!\nИгрок " + player_name + " угадал слово!!!");
+                            return;
+                        }
+                        System.out.printf("Наш игрок под номером %d - %s покидает нас :(\n\tПожелаем ему удачи !\n", move + 1, player_name);
+                        players[move].is_active = false;
+                        break;
+                    }
                 }
-                System.out.println(player_name + " " + players[move].points + "-->" + field);
+                if(players[move].is_active)System.out.println(player_name + " " + players[move].points + "-->" + field);
             }
             move ++;
             move %= players.length;
-            while(!players[move].is_active){
+            int sum = 0;
+            while(!players[move].is_active && sum <= players.length){
                 move ++;
                 move %= players.length;
+                sum ++;
+            }
+            if(sum > players.length){
+                System.out.println("Все игроки выбыли!!");
+                return;
             }
 //            if(move + 1 == players.length)break;
 
