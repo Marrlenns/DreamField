@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Master {
@@ -40,6 +41,16 @@ public class Master {
         System.out.println("↑ ↑ ↑ У нас победитель ↑ ↑ ↑");
     }
 
+    public static void fieldoutput(String s){
+        for(int i = 0; i < s.length(); i++) System.out.print(s.charAt(i) + "|");
+        System.out.println();
+    }
+
+    public static boolean check(String s){
+        for(int i = 0; i < s.length(); i++)if(s.charAt(i) == '*')return false;
+        return true;
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Player[] players = addPlayers();
@@ -71,12 +82,47 @@ public class Master {
                     int index = field.indexOf(user_input);
                     players[move].points += 10;
                     field = field.substring(0, index) + '*' + field.substring(index + 1);
+                    str1 = str1.substring(0, index) + user_input + str1.substring(index + 1);
                     while(field.contains(user_input)) {
                         index = field.indexOf(user_input);
                         players[move].points += 10;
                         field = field.substring(0, index) + '*' + field.substring(index + 1);
+                        str1 = str1.substring(0, index) + user_input + str1.substring(index + 1);
                     }
-                    System.out.println("Вы угадали букву, данное слово выглядит так: " + field + "\nВам предоставляется еще один ход ↓");
+                    System.out.println("Вы угадали букву, данное слово выглядит так: ");
+                    fieldoutput(str1);
+                    if(check(str1)){
+                        int maxx = 0, ind = 0;
+                        for(int i = 0; i < players.length; i++){
+                            if(players[i].points > maxx){
+                                maxx = players[i].points;
+                                ind = i;
+                            }
+                        }
+                        win(players[ind].name);
+                        return;
+                    }
+                    if(players[move].points > str1.length() / 2 * 10){
+                        int old = move;
+                        move++;
+                        System.out.println("У игрока " + player_name + " больше всех очков!!!\nДругим игрокам предостовляется шанс выиграть игру ↓");
+                        while (old != move){
+                            if(players[move].is_active){
+                                System.out.printf("Игрок под номером %d - %s, ваш ход ↓ \n", move + 1, players[move].name);
+                                user_input = scanner.nextLine();
+                                if(user_input.equalsIgnoreCase(word.title)){
+                                    win(players[move].name);
+                                    return;
+                                } else System.out.printf("Наш игрок под номером %d - %s покидает нас :(\n\tПожелаем ему удачи !\n", move + 1, players[move].name);
+                            }
+                            move++;
+                            move %= players.length;
+                        }
+                        System.out.println("Никто из оставшихся игроков не отгадал слово");
+                        win(player_name);
+                        return;
+                    }
+                    System.out.println("Вам предоставляется еще один ход ↓");
                     user_input = scanner.nextLine();
                     if(user_input.length() > 1) {
                         if (user_input.equalsIgnoreCase(word.title)) {
@@ -88,7 +134,7 @@ public class Master {
                         break;
                     }
                 }
-                if(players[move].is_active)System.out.println(player_name + " " + players[move].points + "-->" + field);
+                if(players[move].is_active)System.out.println(player_name + " " + players[move].points + "-->" + str1);
             }
             move ++;
             move %= players.length;
