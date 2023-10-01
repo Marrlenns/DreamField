@@ -44,6 +44,8 @@ public class Master {
         System.out.println("                    Давайте начнем нашу игру!\n                    ↓↓↓     ПОДСКАЗКА     ↓↓↓");
         System.out.println(word.description);
         int move = 0;
+        String field = word.title.toLowerCase(), str1 = "";
+        for(int i = 0 ; i < field.length(); i++)str1 += "*";
         while(true){
             String player_name = players[move].name.substring(0, 1).toUpperCase() + players[move].name.substring(1);
             System.out.printf("Игрок под номером %d - %s, ваш ход ↓ \n", move + 1, player_name);
@@ -53,12 +55,30 @@ public class Master {
                     System.out.println("У нас победитель!!!\nИгрок "  + player_name + " угадал слово!!!");
                     return;
                 }
-                System.out.printf("Нащ игрок под номером %d - %s покидает нас :(\n\tПожелаем ему удачи !\n", move + 1, player_name);
+                System.out.printf("Наш игрок под номером %d - %s покидает нас :(\n\tПожелаем ему удачи !\n", move + 1, player_name);
                 players[move].is_active = false;
+            } else{
+                while(field.contains(user_input)){
+                    int index = field.indexOf(user_input);
+                    players[move].points += 10;
+                    field = field.substring(0, index) + '*' + field.substring(index + 1);
+                    while(field.contains(user_input)) {
+                        index = field.indexOf(user_input);
+                        players[move].points += 10;
+                        field = field.substring(0, index) + '*' + field.substring(index + 1);
+                    }
+                    System.out.println("Вы угадали букву, данное слово выглядит так: " + field + "\nВам предоставляется еще один ход ↓");
+                    user_input = scanner.nextLine();
+                }
+                System.out.println(player_name + " " + players[move].points + "-->" + field);
             }
             move ++;
-            if(move == players.length)break;
             move %= players.length;
+            while(!players[move].is_active){
+                move ++;
+                move %= players.length;
+            }
+//            if(move + 1 == players.length)break;
 
         }
     }
