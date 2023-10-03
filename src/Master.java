@@ -1,8 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Scanner;
-
+import java.util.*;
 public class Master {
 
     public static Player[] addPlayers(){
@@ -26,10 +22,39 @@ public class Master {
     }
 
     public static Word words(){
-        Word testWord = new Word();
-        testWord.title = "Субботник";
-        testWord.description = "Добровольная коллективная бесплатная работа для выполнения какого-нибудь общественно \nполезного трудового задания";
-        return testWord;
+        Word[] testWord = new Word[10];
+        testWord[0] = new Word();
+        testWord[0].title = "Субботник";
+        testWord[0].description = "Добровольная коллективная бесплатная работа для выполнения какого-нибудь общественно полезного трудового задания";
+        testWord[1] = new Word();
+        testWord[1].title = "Самоходка";
+        testWord[1].description = "Боевая машина, представляющая собой артиллерийское орудие, смонтированное на самодвижущемся шасси и предназначенное для стрельбы с закрытых позиций и непосредственной огневой поддержки танков и пехоты в бою";
+        testWord[2] = new Word();
+        testWord[2].title = "Чихание";
+        testWord[2].description = "Человеческие способности довольно велики. Например, мы можем собственными силами разогнать воздушный поток до 150–170 км/ч. В процессе чего человек способен произвести такой воздушный поток?";
+        testWord[3] = new Word();
+        testWord[3].title = "Сковорода";
+        testWord[3].description = "Что использовали в Китае для глажки белья вместо утюга?";
+        testWord[4] = new Word();
+        testWord[4].title = "Канализация";
+        testWord[4].description = "Первый подобный музей появился в Париже до 1975 года. Экскурсии по нему проводились на лодке. Сейчас туристы осматривают его экспонаты со специальных решеток и пандусов. О каком музее идет речь?";
+        testWord[5] = new Word();
+        testWord[5].title = "Уверенность";
+        testWord[5].description = "Английский писатель Киплинг говорил: «Женская интуиция намного точнее, чем мужская...»";
+        testWord[6] = new Word();
+        testWord[6].title = "Сарафан";
+        testWord[6].description = "В XIV–XVI веках его носили мужчины. С XVII века его стали носить женщины. Названий было много: шторник, пестряк, клинник, наколоточник и др. До нас дошло лишь одно название. Какое?";
+        testWord[7] = new Word();
+        testWord[7].title = "Кенгуру";
+        testWord[7].description = " Любой современный человек знает, как на языке австралийских аборигенов звучит фраза “Я тебя не понимаю”.";
+        testWord[8] = new Word();
+        testWord[8].title = "Замок";
+        testWord[8].description = "Этот предмет изобрели в Древнем Египте. Тогда он полностью изготовлялся из дерева. По идее египетских мастеров в 19 веке Линиус Йейл изготовил современную металлическую модель, сохранив полностью принцип действия. У нас он обычно называется “английским”.";
+        testWord[9] = new Word();
+        testWord[9].title = "Силуэт";
+        testWord[9].description = "Около двухсот лет назад во Франции появилось оригинальное искусство портрета. Эти портреты отличались дешевизной, поэтому такой вид искусства получил поддержку министра финансов Франции, человека жадного и неприятного. Французы стали называть эти портреты по фамилии министра-скряги. Назовите эту фамилию.";
+        Random random = new Random();
+        return testWord[random.nextInt(0, 10)];
     }
 
     public static void win(String player_name){
@@ -51,6 +76,24 @@ public class Master {
         return true;
     }
 
+    public static void descriptionOutput(String s){
+        int space = 1;
+        for(int i = 0; i < 80; i++) System.out.print('-');
+        System.out.println();
+        for(int i = 0; i < s.length(); i++){
+            if(i > space * 70 && s.charAt(i) == ' '){
+                space ++;
+                i ++;
+                System.out.println();
+            }
+//            if(i % 85 == 0) System.out.println();
+            System.out.print(s.charAt(i));
+        }
+        System.out.println();
+        for(int i = 0; i < 80; i++) System.out.print('-');
+        System.out.println();
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Player[] players = addPlayers();
@@ -62,7 +105,8 @@ public class Master {
         System.out.println("Игроки будут ходить по следующей очередности ↓");
         for(int i = 0; i < players.length; i++) System.out.println("\t" + (i + 1) + ". " + players[i].name);
         System.out.println("                    Давайте начнем нашу игру!\n                    ↓↓↓     ПОДСКАЗКА     ↓↓↓");
-        System.out.println(word.description);
+//        System.out.println(word.description);
+        descriptionOutput(word.description);
         int move = 0;
         String field = word.title.toLowerCase(), str1 = "";
         for(int i = 0 ; i < field.length(); i++)str1 += "*";
@@ -105,6 +149,7 @@ public class Master {
                     if(players[move].points > str1.length() / 2 * 10){
                         int old = move;
                         move++;
+                        move %= players.length;
                         System.out.println("У игрока " + player_name + " больше всех очков!!!\nДругим игрокам предостовляется шанс выиграть игру ↓");
                         while (old != move){
                             if(players[move].is_active){
