@@ -4,7 +4,7 @@ public class Master {
     public static Player[] addPlayers(){
         Scanner scanner = new Scanner(System.in);
         ArrayList<String> names_list = new ArrayList<>();
-        System.out.println("Если хотите остановить игру, введите пустую строку!!!");
+        System.out.println("Если хотите остановить ввод игроков, введите пустую строку!!!");
         int cnt = 1;
         while(true){
             System.out.printf("Введите имя %d игрока: ", cnt);
@@ -68,7 +68,7 @@ public class Master {
 
     public static void fieldoutput(String s){
         for(int i = 0; i < s.length(); i++) System.out.print(s.charAt(i) + "|");
-        System.out.println();
+        System.out.println("\n");
     }
 
     public static boolean check(String s){
@@ -94,6 +94,30 @@ public class Master {
         System.out.println();
     }
 
+    public static boolean isDigit(String s){
+        for(int i = 0; i < s.length(); i++){
+            if(Character.isDigit(s.charAt(i))) return true;
+        }
+        return false;
+    }
+
+    public static String rightInput(){
+        Scanner scanner = new Scanner(System.in);
+        String user_input = scanner.nextLine();
+        while(true){
+            if(user_input.isEmpty()){
+                System.out.println("Ваша строка пустая! Ввeдите что-нибудь!");
+                user_input = scanner.nextLine();
+            }
+            else if(isDigit(user_input)){
+                System.out.println("Вы должны вводить строго буквы!!");
+                user_input = scanner.nextLine();
+            }
+            else break;
+        }
+        return user_input;
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Player[] players = addPlayers();
@@ -102,24 +126,25 @@ public class Master {
             System.out.println("Игроков к сожалению нет :(\n\tПридется остановить игру :(");
             return;
         }
-        System.out.println("Игроки будут ходить по следующей очередности ↓");
+        System.out.println("\nИгроки будут ходить по следующей очередности ↓");
         for(int i = 0; i < players.length; i++) System.out.println("\t" + (i + 1) + ". " + players[i].name);
-        System.out.println("                    Давайте начнем нашу игру!\n                    ↓↓↓     ПОДСКАЗКА     ↓↓↓");
+        System.out.println("\n↓ ↓ ↓ ↓ ↓                  Давайте начнем нашу игру!                  ↓ ↓ ↓ ↓ ↓");
 //        System.out.println(word.description);
         descriptionOutput(word.description);
         int move = 0;
         String field = word.title.toLowerCase(), str1 = "";
         for(int i = 0 ; i < field.length(); i++)str1 += "*";
+        fieldoutput(str1);
         while(true){
             String player_name = players[move].name.substring(0, 1).toUpperCase() + players[move].name.substring(1);
             System.out.printf("Игрок под номером %d - %s, ваш ход ↓ \n", move + 1, player_name);
-            String user_input = scanner.nextLine();
+            String user_input = rightInput();
             if(user_input.length() > 1){
                 if(user_input.equalsIgnoreCase(word.title)){
                     win(player_name);
                     return;
                 }
-                System.out.printf("Наш игрок под номером %d - %s покидает нас :(\n\tПожелаем ему удачи !\n", move + 1, player_name);
+                System.out.printf("\nК сожалению вы не отгадали слово!\n\tНаш игрок под номером %d - %s покидает нас :(\n\t\tПожелаем ему удачи !\n\n", move + 1, player_name);
                 players[move].is_active = false;
             } else{
                 while(field.contains(user_input)){
@@ -133,7 +158,7 @@ public class Master {
                         field = field.substring(0, index) + '*' + field.substring(index + 1);
                         str1 = str1.substring(0, index) + user_input + str1.substring(index + 1);
                     }
-                    System.out.println("Вы угадали букву, данное слово выглядит так: ");
+                    System.out.println("Поздравляем, вы угадали букву, данное слово выглядит так: \n");
                     fieldoutput(str1);
                     if(check(str1)){
                         int maxx = 0, ind = 0;
@@ -150,36 +175,40 @@ public class Master {
                         int old = move;
                         move++;
                         move %= players.length;
-                        System.out.println("У игрока " + player_name + " больше всех очков!!!\nДругим игрокам предостовляется шанс выиграть игру ↓");
+                        System.out.println("У игрока " + player_name + " больше всех очков!!!\n\tДругим игрокам предостовляется шанс выиграть игру.\n\t\tВы должны угадать все слово целиком↓");
                         while (old != move){
+                            String name = players[move].name.substring(0, 1).toUpperCase() + players[move].name.substring(1);
                             if(players[move].is_active){
-                                System.out.printf("Игрок под номером %d - %s, ваш ход ↓ \n", move + 1, players[move].name);
-                                user_input = scanner.nextLine();
+                                System.out.printf("Игрок под номером %d - %s, ваш ход ↓ \n", move + 1, name);
+                                user_input = rightInput();
                                 if(user_input.equalsIgnoreCase(word.title)){
                                     win(players[move].name);
                                     return;
-                                } else System.out.printf("Наш игрок под номером %d - %s покидает нас :(\n\tПожелаем ему удачи !\n", move + 1, players[move].name);
+                                } else System.out.printf("К сожалению вы не отгадали слово :(\n\tНаш игрок под номером %d - %s покидает нас :(\n\t\tПожелаем ему удачи !\n", move + 1, name);
                             }
                             move++;
                             move %= players.length;
                         }
-                        System.out.println("Никто из оставшихся игроков не отгадал слово");
+                        System.out.println("\nНикто из оставшихся игроков не отгадал слово!\n");
                         win(player_name);
                         return;
                     }
                     System.out.println("Вам предоставляется еще один ход ↓");
-                    user_input = scanner.nextLine();
+                    user_input = rightInput();
                     if(user_input.length() > 1) {
                         if (user_input.equalsIgnoreCase(word.title)) {
                             win(player_name);
                             return;
                         }
-                        System.out.printf("Наш игрок под номером %d - %s покидает нас :(\n\tПожелаем ему удачи !\n", move + 1, player_name);
+                        System.out.printf("К сожалению вы не отгадали слово :(\n\tНаш игрок под номером %d - %s покидает нас :(\n\t\tПожелаем ему удачи !\n", move + 1, player_name);
                         players[move].is_active = false;
                         break;
                     }
                 }
-                if(players[move].is_active)System.out.println(player_name + " " + players[move].points + "-->" + str1);
+                if(players[move].is_active){
+                    System.out.println("Такой буквы в данном слове нет :(\n");
+                    fieldoutput(str1);
+                }
             }
             move ++;
             move %= players.length;
